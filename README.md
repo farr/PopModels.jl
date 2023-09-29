@@ -1,4 +1,4 @@
-# PopModes.jl
+# PopModels.jl
 
 Julia package for population modeling: you supply the parameterized population
 model, we supply the rest.  
