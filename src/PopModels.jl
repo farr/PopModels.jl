@@ -3,10 +3,10 @@ module PopModels
 using Distributions
 using StatsFuns
 
-export model_body
+export pop_model_body
 
 """
-  model_body(log_dN_dtheta, thetas, log_theta_wts, thetas_sel, log_pdraw, Ndraw)
+  pop_model_body(log_dN_dtheta, thetas, log_theta_wts, thetas_sel, log_pdraw, Ndraw)
 
 Implements a population model.
 
@@ -87,7 +87,7 @@ use of this function looks like
     return merge(genq, additional_genq) # or just return genq if you have no additional generated quantities
 ```
 """
-function model_body(log_dN, thetas, log_theta_wts, thetas_sel, log_pdraw, Ndraw)
+function pop_model_body(log_dN, thetas, log_theta_wts, thetas_sel, log_pdraw, Ndraw)
   Nobs = length(thetas)
 
   log_wts = map(thetas, log_theta_wts) do ths, log_wwt
