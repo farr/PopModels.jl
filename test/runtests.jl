@@ -1,5 +1,5 @@
 using Distributions
-using PopModel
+using PopModels
 using Random
 using Test
 using Turing
@@ -8,7 +8,7 @@ function p_value(x, xs)
     sum(xs .<= x)/length(xs)
 end
 
-@testset "PopModel.jl Tests" begin
+@testset "PopModels.jl Tests" begin
     @testset "Normal-Normal model" begin
         Random.seed!(1404601137169444883)
         mu_true = 0.0

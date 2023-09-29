@@ -1,4 +1,4 @@
-name = "PopModel"
+name = "PopModels"
 uuid = "892b8080-b5ae-40c6-b39e-70bacc896524"
 authors = ["Will M. Farr <will.farr@ligo.org>"]
 version = "0.1.0"

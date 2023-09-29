@@ -1,4 +1,4 @@
-module PopModel
+module PopModels
 
 using Distributions
 using StatsFuns
