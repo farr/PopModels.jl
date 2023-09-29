@@ -39,6 +39,17 @@ PopModels.jl will:
 (This is just a more extensively commented version of one of the tests in
 `test/runtests.jl` if you want to see it in action!)
 
+We begin by generating a mock catalog of observations and a set of injections to
+measure our selection function.  Normally this part of the process would be done
+already by the time you are doing your population analysis (see e.g. the [GWTC-3
+LIGO-Virgo-Kagra catalog parameter estimates](https://zenodo.org/record/5546663)
+and [search sensitivity estimates](https://zenodo.org/record/5546676)), but we
+do it here for the sake of the example.
+
+Then we infer the population model parameters using this catalog and make some
+plots that show we accurately recover the true parameters used to generate the
+catalog.
+
 ### Mock Catalog
 
 Suppose you have a population of objects with a single parameter `x` distributed
@@ -202,6 +213,8 @@ and measure the uncertainty given this catalog of around 100 observations.
   be used to form a "predicted detected distribution" for the population model,
   which can be compared to the population-weighted catalog samples for model
   checking.
+
+#### Checking the Simulation
   
 Here is a traceplot:
 
@@ -213,6 +226,30 @@ savefig("static/traceplot.png")
 ```
 
 ![traceplot](static/traceplot.png)
+
+We can check that the effective number of injections contributing to the
+selection function estimate is large enough for accurate estimation:
+
+```julia
+using Printf
+
+neff_min = minimum([x.Neff_sel for x in genq])
+@printf("neff_min = %.1f\n", neff_min) # => 1769.7
+println("neff_min > 4*len(xpost): $(neff_min > 4*length(xpost))") # => true
+```
+
+We can also check that the effective number of posterior samples contributing to
+the likelihood integral is reasonable:
+
+```julia
+npost_min = minimum([minimum(x.Neff_samps) for x in genq])
+@printf("npost_min = %.1f\n", npost_min) # => 1.2
+```
+
+That's a bit smaller than we would like in a production analysis, but we'll roll
+with it for now!
+
+#### Post-Processing the Population Posterior, Plots
 
 We can see that the posteriors for both `mu` and `sigma` support the true values
 of these parameters: 
