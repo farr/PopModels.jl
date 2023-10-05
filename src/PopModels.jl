@@ -4,6 +4,7 @@ using Distributions
 using StatsFuns
 
 export pop_model_body
+export estimate_Nposts
 
 """
   pop_model_body(log_dN_dtheta, thetas, log_theta_wts, thetas_sel, log_pdraw, Ndraw)
@@ -128,6 +129,53 @@ function pop_model_body(log_dN, thetas, log_theta_wts, thetas_sel, log_pdraw, Nd
   theta_draw = thetas_sel[i_sel]
 
   return log_like_sum, log_norm_sum, (R = R, Neff_sel = Neff_sel, Neff_samps = Neff_samps, thetas_popwt=thetas_popwt, theta_draw=theta_draw)
+end
+
+"""
+    estimate_Nposts(genq, Nposts, min_Neff_samps_desired)
+
+Return an array giving an estimate of the number of posterior samples needed for
+each event in a catalog to ensure that the minimum `Neff_samps` achieved in a
+re-run of an MCMC is approximately `min_Neff_samps_desired`.
+
+# Arguments
+
+- `genq`: Generated quantities from a previous MCMC run.
+- `Nposts`: Array giving the number of posterior samples used for each member of
+  the catalog in that run.
+- `min_Neff_samps_desired`: The minimum number of effective samples desired for
+  each event in a future MCMC run.
+
+# Return
+
+`Nposts_new`: an array estimating the number of posterior samples needed to
+produce at least `min_Neff_samps_desired` effective samples for each event in
+the catalog in a future run.
+
+# Example
+
+Suppose that `genq` is the generated quantities from an un-converged MCMC run
+that was un-converged because `Neff_samps` for one or more events is not `>> 1`
+when `Nposts` samples were used for the corresponding events. We want to re-run,
+drawing more posterior samples for the troublesome events (and fewer for events
+that have more effective samples than needed).  Suppose we desire a minimum of
+10 effective samples for each event.  Then 
+
+```julia
+Nposts_new = estimate_Nposts(genq, Nposts, 10)
+```
+
+gives the number of posterior samples needed for each event in a future run.
+"""
+function estimate_Nposts(genq, Nposts, min_Neff_samps_desired)
+  map(enumerate(Nposts)) do (i, Np)
+    min_ne = minimum([x.Neff_samps[i] for x in genq])
+    if min_ne < min_Neff_samps_desired/2 || min_ne > 2*min_Neff_samps_desired
+      Int(round(Np * min_Neff_samps_desired / min_ne))
+    else
+      Np
+    end
+  end
 end
 
 end # module PopModel
