@@ -6,6 +6,7 @@ using StatsFuns
 export pop_model_body
 export estimate_Nposts
 
+
 """
   pop_model_body(log_dN_dtheta, thetas, log_theta_wts, thetas_sel, log_pdraw, Ndraw)
 
@@ -138,6 +139,12 @@ Return an array giving an estimate of the number of posterior samples needed for
 each event in a catalog to ensure that the minimum `Neff_samps` achieved in a
 re-run of an MCMC is approximately `min_Neff_samps_desired`.
 
+If the *actual* number of effective samples for an object is between
+`min_Neff_samps_desired/2` and `2*min_Neff_samps_desired`, then the number of
+samples for that object is not changed.  Otherwise, the number of samples is
+scaled by the ratio of the actual number of effective samples to
+`min_Neff_samps_desired`.  
+
 # Arguments
 
 - `genq`: Generated quantities from a previous MCMC run.
@@ -149,8 +156,8 @@ re-run of an MCMC is approximately `min_Neff_samps_desired`.
 # Return
 
 `Nposts_new`: an array estimating the number of posterior samples needed to
-produce at least `min_Neff_samps_desired` effective samples for each event in
-the catalog in a future run.
+produce approximately `min_Neff_samps_desired` effective samples for each event
+in the catalog in a future run that is similar to this one.
 
 # Example
 
