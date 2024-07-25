@@ -121,7 +121,7 @@ function pop_model_body(log_dN, thetas, log_theta_wts, thetas_sel, log_pdraw, Nd
   mu = exp(log_mu)
   R = rand(Normal(Nobs/mu, sqrt(Nobs)/mu))
   
-  thetas_popwt = map(thetas, log_theta_wts) do ths, log_wwt
+  thetas_popwt = map(thetas, log_wts) do ths, log_wwt
       i = rand(Categorical(exp.(log_wwt .- logsumexp(log_wwt))))
       ths[i]
   end
