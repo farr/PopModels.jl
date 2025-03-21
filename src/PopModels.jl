@@ -99,7 +99,9 @@ function pop_model_body(log_dN, thetas, log_theta_wts, thetas_sel, log_pdraw, Nd
   end
 
   Neff_samps = map(log_wts) do lws
-      exp(2*logsumexp(lws) - logsumexp(2 .* lws))
+      mu_l = logsumexp(lws)
+      wt = exp.(lws .- mu_l)
+      1 / (length(wt) * var(wt))
   end
 
   log_likes = map(log_wts) do lw

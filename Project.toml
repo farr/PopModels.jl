@@ -15,3 +15,10 @@ Turing = "fce5fe82-541a-59a6-adf8-730c64b5f9a0"
 
 [targets]
 test = ["GaussianKDEs", "Random", "Test", "Turing"]
+
+[compat]
+julia = "1"
+Distributions = "0.25"
+StatsFuns = "1"
+GaussianKDEs = "0.1"
+Turing = "0.37"

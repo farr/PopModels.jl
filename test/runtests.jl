@@ -57,7 +57,7 @@ end
         Nmcmc = 1000
         Ntune = Nmcmc
         trace = sample(model, NUTS(Ntune, 0.65), Nmcmc)
-        genq = generated_quantities(model, trace)
+        genq = returned(model, trace)
 
         @test minimum([x.Neff_sel for x in genq]) > 4*length(x_det)
         @test minimum([minimum([x.Neff_samps[i] for x in genq]) for i in eachindex(x_det)]) > 8
