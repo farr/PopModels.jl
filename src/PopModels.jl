@@ -36,7 +36,7 @@ description of how selection effects are estimated in this model using
 
 `(log_likelihood_sum, log_normalization_sum, generated_quantities)`
 
-After calling `model_body(...)`, you should add the log-likelihood and
+After calling `pop_model_body(...)`, you should add the log-likelihood and
 log-normalization terms to the density via
 
 ```julia
